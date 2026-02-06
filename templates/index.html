@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Markov Chord Synth</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div id="app-container" class="landing-mode">
+    
+    <aside id="sidebar">
+        <header>
+            <h3>MARKOV SYNTH</h3>
+            <div class="subtitle">Second-Order Chain Generator</div>
+        </header>
+
+        <div class="landing-only instruction-box">
+            Input your chords below, then click Initialize.
+        </div>
+
+        <div class="input-group">
+            <textarea id="progressionInput">D-M7 E-6 Cm7 Fm7
+D-M7 E-6 Cm7 Fm7
+
+A- E-/G Fm7 E-m7 A-7
+D-M7 E-6 Cm7 Fm7 B-m7 E-7 A-
+A- E-/G Fm7 E-m7 A-7
+D-M7 E-6 Cm7 Fm7 B-m7 E-7 A-
+
+D-M7 E-7 Cm7 Fm7
+D-M7 E-7 C7 Fm7 G-M7 E-7
+
+D-M7 E-7 Cm7 Fm7
+D-M7 E-7 C7 Fm7
+D-M7 E-7 Cm7 Fm7
+B-m7 Cm7 D-M7 E-7 A-
+
+EM7 G-7 E-m7 A-m7
+EM7 G-7 E-7/G A-m7
+D-m7 E-m7 EM7 G-7 E-7
+
+D-M7 E-7 Cm7 Fm7
+D-M7 E-7 Cm7 Fm7
+
+D-M7 E-7 Cm7 Fm7
+D-M7 E-7 C7 Fm7
+D-M7 E-7 Cm7 Fm7
+B-m7 Cm7 D-M7 E-7 A-
+
+D-M7 E-6 Cm7 Fm7
+B-m7 E-7 A-</textarea>
+        </div>
+
+        <div class="dashboard-only control-row">
+            <span style="font-size:11px; font-weight:bold; color:#fff;">STEP SPEED (S)</span>
+            <input type="number" id="speedInput" value="2" step="0.5" min="0.5" max="5">
+        </div>
+
+        <div class="dashboard-only control-row">
+            <span style="font-size:11px; font-weight:bold; color:#fff;">VOLUME</span>
+            <input type="range" id="volumeInput" min="0" max="1" step="0.01" value="0.5" oninput="setGlobalVolume(this.value)">
+        </div>
+
+        <div class="btn-row">
+            <button id="initBtn" onclick="initializeSequence()">
+                <span class="btn-num">1.</span> Initialize
+            </button>
+            <button id="playBtn" onclick="togglePlayback()" disabled>
+                <span class="btn-num">2.</span> Start / Stop
+            </button>
+        </div>
+        
+        <div class="dashboard-only about-section">
+            <h4>How it works</h4>
+            <div class="about-text">
+                This tool looks at your input and builds a <strong>second-order Markov model</strong> from it.
+                <br><br>
+                <strong>The graph</strong> doesn’t treat chords in isolation. Each node represents a short bit of harmonic context (for example, “Dm7 → G7”), and the links show where that exact setup tends to move next.
+                <br><br>
+                <strong>The audio engine</strong> walks those paths in real time, so what you hear is shaped by where the progression has just been—not just what chord is playing now.
+                <br><br>
+                <em>Use the controls above to tweak playback speed or experiment with different source progressions.</em>
+            </div>
+        </div>
+
+        <div id="errorLog"></div>
+    </aside>
+
+    <main id="graph-wrapper">
+        <button id="fs-btn" onclick="toggleFullscreen()">&#x26F6;</button>
+        <svg id="graph"></svg>
+    </main>
+
+</div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.cycling74.com/rnbo/latest/rnbo.min.js"></script>
+<script src="/static/js/audio.js"></script>
+<script src="/static/js/graph.js"></script>
+<script src="/static/js/app.js"></script>
+</body>
+</html>
